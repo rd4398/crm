@@ -75,7 +75,7 @@ def add_customer(request):
     form = AddCustomerForm(request.POST or None)
     if request.user.is_authenticated:
         if request.method == "POST":
-            if form.is_valid:
+            if form.is_valid():
                 add_customer = form.save()
                 messages.success(request, "Customer Added Successfully")
                 return redirect('home')
@@ -89,7 +89,7 @@ def update_customer(request, pk):
     if request.user.is_authenticated:
         current_record = Customer.objects.get(id=pk)
         form = AddCustomerForm(request.POST or None, instance=current_record)
-        if form.is_valid:
+        if form.is_valid():
             form.save()
             messages.success(request, "Customer Updated Successfully")
             return redirect('home')
