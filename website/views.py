@@ -84,3 +84,16 @@ def add_customer(request):
     else:
          messages.success(request, "You must be logged in to add customer")
          return redirect('home')
+
+def update_customer(request, pk):
+    if request.user.is_authenticated:
+        current_record = Customer.objects.get(id=pk)
+        form = AddCustomerForm(request.POST or None, instance=current_record)
+        if form.is_valid:
+            form.save()
+            messages.success(request, "Customer Updated Successfully")
+            return redirect('home')
+        return render(request, 'update_record.html', {'form':form})
+    else:
+        messages.success(request, "You must be logged in to update customer")
+        return redirect('home')
