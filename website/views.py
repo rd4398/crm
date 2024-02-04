@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import RegisterForm
+from .forms import RegisterForm, AddCustomerForm
 from .models import Customer
 
 # Create your views here.
@@ -70,3 +70,17 @@ def delete_customer(request, pk):
     else:
         messages.success(request, 'You need to login in order to delete')
         return redirect('home')
+    
+def add_customer(request):
+    form = AddCustomerForm(request.POST or None)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            if form.is_valid:
+                add_customer = form.save()
+                messages.success(request, "Customer Added Successfully")
+                return redirect('home')
+        
+        return render(request, 'add_record.html', {'form':form})
+    else:
+         messages.success(request, "You must be logged in to add customer")
+         return redirect('home')
